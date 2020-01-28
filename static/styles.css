@@ -1,0 +1,275 @@
+/*Main Styling*/
+html, body {
+  background-color: #efefef;
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",sans-serif;
+}
+h1 {
+  font-size:2.25em;
+}
+h2{
+  font-size: 24px;
+  color: #666;
+}
+h4{
+  font-size: 20px;
+}
+section h1, p, h2, h3, h4{
+  margin-left: 5%;
+  margin-right: 5%;
+}
+.wrapper{
+  max-width: 80em;
+  margin-left: 15px;
+  margin-right: 15px;
+}
+/*Header Styling*/
+header {
+  width: 100%;
+  padding: 2rem 0rem;
+  background-color: #07a;
+  border-color: #07a;
+  box-shadow: 0 0 2px -1px rgba(0, 0, 0, 0.12), 0 1px 1px rgba(0, 0, 0, 0.24);
+}
+/*Hero Styling*/
+.hero-image {
+  background-image: linear-gradient(rgba(0, 172, 78, 0.5), rgba(0, 210, 95, 0.5)), url("/media/black-and-white-business-chart-computer.jpg");
+  height: 50%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  min-height: 350px;
+}
+.hero-text {
+  text-align: left;
+  position: absolute;
+  top: 10%;
+  left: 0;
+  color: white;
+}
+.hero-text h2{
+  color: white;
+}
+/*Article Styling*/
+#root{
+  width: 100%;
+  margin: 0 auto;
+}
+.card {
+  margin: 1rem;
+  border: 1px solid gray;
+  background-color: white;
+  letter-spacing: 0.3px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 30px 0;
+}
+.article-img{
+  flex-basis: 22%;
+  margin-right: 15px;
+}
+.article-img img{
+  min-width: 130px;
+  max-width: 300px;
+  height: auto;
+}
+.article-info{
+  vertical-align: middle;
+  flex: 1 1 50%;
+  float: right;
+}
+.article-info a{
+  text-decoration: none;
+  color: #005796;
+}
+/*SA Styling*/
+.join_sa {
+display: flex;
+align-items: center;
+width: 100%;
+background-color: #005796a3;
+margin:0 auto;
+padding: 10px 0px 30px 0px;
+color: white;
+}
+#SA_SP{
+    width:405px;
+    font-size: 20px;
+    text-transform: uppercase;
+}
+#market-chart{
+  margin-top: 5%;
+  flex: 50%;
+}
+#market-title{
+  flex: 50%;
+  text-align: center;
+  }
+#market-title h2{
+  color:white;
+}
+#market-title img{
+  max-width: 300px;
+  border-radius: 10px;
+}
+.return-year{
+  width:405px;
+  text-align: center;
+  background-color: #005796;
+  font-size: 18px;
+}
+.return-data{
+  width:405px;
+  text-align: center;
+  font-size: 28px;
+  display: flex;
+}
+.return-stat{
+  width:200px;
+  display: inline-flex;
+}
+.return-stat span{
+  margin: 0 auto;
+}
+#SA_info{
+  width: 405px;
+  text-align: center;
+}
+.button{
+  display: inline-block;
+margin: 5px 0 10px 0;
+padding: 10px 19px;
+color: #fff;
+font-weight: bold;
+text-decoration: none;
+border-radius: 5px;
+background: #005796;
+border: solid 1px #005796;
+cursor: pointer;
+text-align: center;
+}
+#SA_info a:hover {
+    color: lightblue;
+}
+.hidden{
+  display: none;
+}
+/* Custom dropdown */
+
+select {
+  background-color: #005796;
+  color: #fff;
+  font-size: inherit;
+  padding: .5em;
+  padding-right: 2.5em; 
+  border: 0;
+  margin: 0;
+  margin-right: 5%;
+  margin-top: 10px;
+  border-radius: 3px;
+  text-indent: 0.01px;
+  text-overflow: '';
+  -webkit-appearance: button; /* hide default arrow in chrome OSX */
+}
+select::after { /*  Custom dropdown arrow */
+  content: "\25BC";
+  height: 1em;
+  font-size: .625em;
+  line-height: 1;
+  right: 1.2em;
+  top: 50%;
+  margin-top: -.5em;
+}
+
+.custom-dropdown::after { /*  Custom dropdown arrow */
+  content: "\25BC";
+  height: 1em;
+  font-size: .625em;
+  line-height: 1;
+  right: 1.2em;
+  top: 50%;
+  margin-top: -.5em;
+}
+
+
+/*Tablet Styling*/
+@media only screen and (max-width: 812px) {
+  .card{
+    margin:15px 15px 15px 0px;
+  }
+  .article-info{
+  }
+  .article-img img{
+    width: 100%;
+    height: auto;
+    max-width: 300px;
+    object-fit: cover;
+  }
+  .join_sa{
+    display: inline-block;
+  }
+  #market-chart{
+     flex: 100%;
+  }
+  #market-title{
+     flex: 100%;
+  }
+  #market-title img{
+      display: none;
+    }
+    #SA_SP{
+      margin: 0 auto;
+    }
+    .return-year{margin: 0 auto}
+    .return-data{margin: 0 auto;}
+    .return-stat{margin: 0 auto;}
+#SA_info{margin: 0 auto;}
+/*Mobile Styling*/
+@media only screen and (max-width: 430px) {
+  .hero-text {
+    top: 0;
+  }
+  .card{
+    margin: 30px 0;
+  }
+  .wrapper {
+    margin: 0;
+  }
+  .article-img{
+    flex-basis: 100%;
+    margin: 0;
+  }
+  .article-img img{
+    min-width: 100%;
+    width: 100%;
+    height: auto;
+  }
+  .article-info{
+    vertical-align: middle;
+    flex: 100%;
+    float: right;
+    background-color: white;
+  }
+  .return-year{
+    max-width: 305px;
+  }
+  .return-data{
+    max-width: 305px; 
+  }
+  .return-stat{
+    max-width: 150px; 
+    text-align: center;
+  }
+  #SA_SP {
+        max-width: 305px; 
+  }
+  #SA_info{
+    max-width: 305px; 
+  }
+}

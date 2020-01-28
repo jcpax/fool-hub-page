@@ -1,0 +1,42 @@
+{% load static %}
+
+<html>
+  <head>
+    <title>Stock Market News</title>
+      <link rel="stylesheet" href="/static/styles.css">
+      <meta name="keywords" content="Stock Market News, Stock Advisor, stocks, articles, stock ideas, investing">
+      <meta name="Stock Market News" content="A Foolish take on stocks and the market. Get stock ideas, investing tips, and perspective.">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <header>
+      <div>
+    <a href="http://www.fool.com" class="link-white no-hover" aria-label="home page">
+          <img alt="Motley Fool Logo" src="https://g.foolcdn.com/art/fool15/bg/fool-logo.png">
+        </a>
+      </div>
+    </header>
+    <section id="hero-section">
+    <div class="hero-image">
+      <div class="hero-text">
+        <h1 style="font-size:50px">Stock Market News</h1>
+        <h2>A Foolish take on stocks and the market. Get stock ideas, investing tips, and perspective.</h2>
+      </div>
+    </div>
+    </section>
+          <section id="SA-section">
+        <!-- Join SA CTA -->
+          {% include "partials/join_sa.html" %}
+      </section>
+    <div class="wrapper">
+      <section id="article-section">
+        <div id="selectors"></div>
+        <h2>Latest Headlines</h2>
+        <div id="root"></div>
+        <button id='more'class="button">Read More</button>
+      </section>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/script.js"></script>
+  </body>
+</html>
