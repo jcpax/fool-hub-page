@@ -8,15 +8,32 @@ $(function(){
   app.appendChild(search);
   app.appendChild(container);
 
+  //setting bureau and exchange dropdown array
+  var bureau_dropdown = [];
+  var exchange_dropdown = [];
+  var name_symbol_dropdown = []
+  
+    //AJAX call Instruments API
+    $.ajax({
+      type: 'GET',
+      url: 'http://127.0.0.1:8000/api/instruments',
+      success: function(data){
+        for (var i = data.length - 1; i >= 0; i--) {
+          var compName = data[i].CompanyName;
+          var compSymbol = data[i].Symbol;
+          var allExchanges = data[i].Exchange;
+          //add values to dropdowns
+          exchange_dropdown.push(allExchanges);
+          name_symbol_dropdown.push(compName + ' - ' + compSymbol);
+        }
+      }
+    });
     //AJAX call Article API
     $.ajax({
       type: 'GET',
       url: 'http://127.0.0.1:8000/api/articles',
       success: function(data){
-        //setting bureau and exchange dropdown array
-        var bureau_dropdown = [];
-        var exchange_dropdown = [];
-
+        
         //unorganized data
         var articles_unsorted = data.results;
           function custom_sort(a, b) {
@@ -42,9 +59,17 @@ $(function(){
             for (var i = instruments.length - 1; i >= 0; i--) {
               var exchange = instruments[i].exchange;
             }
-            exchange_dropdown.push(exchange);
             article.setAttribute('data-exchange', exchange);
 
+          //create instrument identity filters
+          var instruments = articles.instruments;
+          for (var i = instruments.length - 1; i >= 0; i--) {
+            //company_name + symbol
+            var compName_each = instruments[i].company_name;
+            var symbol_name = instruments[i].symbol;
+          }
+          
+          article.setAttribute('data-identity', compName_each + ' - ' + symbol_name);
           //grab images
           const img = document.createElement('div');
             var myImage = new Image(500, 300); //set image size
@@ -89,7 +114,7 @@ $(function(){
             desc.textContent= articles.body;
 
           //append consts to article
-            const info = document.createElement('div');
+          const info = document.createElement('div');
             info.className = 'article-info';
             info.appendChild(title);
             info.appendChild(authoring);
@@ -109,19 +134,19 @@ $(function(){
            } else {counter++;
            }if (counter > 5) {$(this).addClass('hidden');}
         });
-        //read more button
+                //read more button
         $('#more').click(function(){
           $(".card").removeClass("hidden");
           $('#more').hide();
         });
-
         //remove repeat items from dropdown list
         let bureau_items = [...new Set(bureau_dropdown)];
         //sort remaining items into options
         var bureau_options = '';
         const bureau_search = document.createElement('select');
+          bureau_search.setAttribute('id', 'bureau_filter');
         //create a filter all option
-        $(bureau_search).append('<option data-bureau="000" selected>All</option>');
+        $(bureau_search).append('<option data-bureau="000" selected>---</option>');
         //for each term create an option
         for (var i=0;i<bureau_items.length;i++){
         bureau_options += '<option data-bureau="'+bureau_items[i] + '">' +bureau_items[i] + '</option>';
@@ -131,13 +156,25 @@ $(function(){
         //sort remaining items into options
         var exchange_options = '';
         const exchange_search = document.createElement('select');
+        exchange_search.setAttribute('id', 'exchange-filter');
         //create a filter all options
-        $(exchange_search).append('<option data-exchange="000" selected>All</option>');
+        $(exchange_search).append('<option data-exchange="000" selected>---</option>');
         //for each term create an option
         for (var i=0;i<exchange_items.length;i++){
         exchange_options += '<option data-bureau="'+exchange_items[i] + '">' +exchange_items[i] + '</option>';
         }
-
+        //remove repeat items from dropdown list
+        let identity_items = [...new Set(name_symbol_dropdown)];
+        //sort remaining items into options
+        var identity_options = '';
+        const identity_search = document.createElement('select');
+        identity_search.setAttribute('id', 'identity-filter');
+        //create a filter all options
+        $(identity_search).append('<option data-exchange="000" selected>---</option>');
+        //for each term create an option
+        for (var i=0;i<identity_items.length;i++){
+        identity_options += '<option data-identity="'+identity_items[i] + '">' +identity_items[i] + '</option>';
+        }
         //add dropdown filter to app
         $(bureau_search).append(bureau_options);
           bureau_search.setAttribute('class', 'bureau');
@@ -146,44 +183,70 @@ $(function(){
         $(exchange_search).append(exchange_options);
           exchange_search.setAttribute('class', 'exchange');
         search.appendChild(exchange_search);
-
-        //create a 'no article found' text area
-        const article_none = document.createElement('h4');
-          article_none.setAttribute('id', 'article_none');
-          article_none.append('Sorry, no articles found');
-          search.appendChild(article_none);
-
-        //search function
-        $('#article_none').hide();//hide none found text
-        //run on dropdown change
-        $("select").change(function() {
-          $('.card').removeClass('hidden');
-          //set values
-          var region = $('select.bureau').val(),
-          role = $('select.exchange').val();
-          //find card that matches values
-          $('.container').find('.card')
+        //add dropdown filter to app
+        $(identity_search).append(identity_options);
+          identity_search.setAttribute('class', 'identity');
+        search.appendChild(identity_search);
+        //create filters for Search Function
+          var filters = {
+          bureau: null,
+          exchange: null,
+          identity: null
+        };
+        //update filters
+        function updateFilters() {
+          $("article")
             .hide()
-            var filtered = $('.card').filter(function() {
-              $('#article_none').hide();//hide none found text
-
-              if(region !== "all" && $(this).attr('data-bureau') === region){
-                return false;
+            .filter(function() {
+            var self = $(this),
+                result = true;
+            Object.keys(filters).forEach(function(filter) {
+              if (
+                filters[filter] &&
+                filters[filter] != "None" &&
+                filters[filter] != "Any"
+              ) {
+                result = result && filters[filter] === self.data(filter);
               }
-              if(role !== "all" && $(this).attr('data-exchange') === role){
-                return false;
-              }
-            return true;
+            });
+            return result;
           })
-          filtered.show();
-
-          if (filtered.length == 0) {
-            $('#article_none').show();
-          }
+            .show();
+        }
+        //change filter
+        function changeFilter(filterName) {
+          $(".card").removeClass("hidden");
+          $('#more').hide();
+          filters[filterName] = this.value;
+          updateFilters();
+        }
+        // Assigned bureau Dropdown Filter
+        $("#bureau_filter").on("change", function() {
+          changeFilter.call(this, "bureau");
         });
-
-      },//end success
+        // Task Exchange Dropdown Filter
+        $("#exchange-filter").on("change", function() {
+          changeFilter.call(this, "exchange");
+        });
+        // Task Exchange Dropdown Filter
+        $("#identity-filter").on("change", function() {
+          changeFilter.call(this, "identity");
+        });
+        //create reset button for filters
+        const reset = document.createElement('button');
+          reset.textContent= 'Reset';
+          reset.setAttribute('class', 'button');
+          reset.setAttribute('id', 'reset');
+          search.appendChild(reset);
+        $("#reset").click(function(){
+          $(".card").show();
+          document.getElementById('bureau_filter').value = '---';
+          document.getElementById('exchange-filter').value = '---';
+          document.getElementById('identity-filter').value = '---';
+        });
+      },
       error: function(){
+        //create error message
         const errorMessage = document.createElement('H2');
         errorMessage.textContent = `Sorry This Section is Not Working`;
         app.appendChild(errorMessage);
